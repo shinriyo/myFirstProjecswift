@@ -19,6 +19,8 @@ import KituraNet
 
 import LoggerAPI
 import SwiftyJSON
+import Mustache
+import Foundation // NSFileManager
 
 /**
  Custom middleware that allows Cross Origin HTTP requests
@@ -44,14 +46,58 @@ func setupRoutes(router: Router) {
 
     router.all("/*", middleware: AllRemoteOriginMiddleware())
 
+    // Webアプリのカレントディレクトリを取得します
+    // サンプルコードの場合、basePathは $HOME/MyApp
+    // let basePath = NSFileManager.defaultManager().currentDirectoryPath
+    // let basePath = TemplateRepository(bundle: NSBundle.mainBundle())
+
+    // テンプレートファイルが配置されているディレクトリのパスを指定する
+    // let repository = TemplateRepository(directoryPath: basePath + "/Statics")
+
     /**
         Get all the todos
     */
+    // router.setTemplateEngine(StencilTemplateEngine())
     router.get("/") {
         request, response, next in
 
-        response.status(.OK).send("shinriyo, World!")
-        next()
+        defer {
+            next()
+        }
+        do {
+            // the example from https://github.com/groue/GRMustache.swift/blob/master/README.md
+            var context: [String: Any] = [
+                "title" : "KItura",
+                "content": [
+                    "header": "Web application framework Kitura",
+                    "text": "Build end-to-end apps using Swift with Kitura",
+                ]
+            ]
+
+            // Let template format dates with `{{format(...)}}`
+            let dateFormatter = NSDateFormatter()
+            dateFormatter.dateStyle = .mediumStyle
+            context["format"] = dateFormatter
+
+            try response.status(.OK).render("layout", context: context).end()
+        } catch {
+            Log.error("Failed to render template \(error)")
+        }
+
+        // Staticsディレクトリ内のlayout.mustacheのテンプレートを取得する
+        // let template = try! repository.template(named: "layout")
+        // let data = [
+        //     "title" : "KItura",
+        //     "content": [
+        //         "header": "Web application framework Kitura",
+        //         "text": "Build end-to-end apps using Swift with Kitura",
+        //     ]
+        // ]
+        // let html = try! template.render(Box(data))
+        // response.status(.OK).send(html)
+
+        // response.status(.OK).send("shinriyo, World!")
+        // next()
         // todos.getAll() {
         //     todos in
         //
@@ -65,6 +111,19 @@ func setupRoutes(router: Router) {
         // }
 
     }
+
+    // router.get("/:name") { request, response, next in
+    //     let name = request.params["name"]!
+    //     // テンプレート作成
+    //     let template = try! Template(string: "Hello, {{name}}!!")
+    //     let data = ["name" : name]
+    //     // 変数の反映
+    //     let boxedData = try! Box(data)
+    //     // HTMLテキスト作成
+    //     let html = try! template.render(boxedData)
+    //     try! response.status(.OK).send(html).end()
+    //     next()
+    // }
 
     /**
      Get information about a todo item by ID

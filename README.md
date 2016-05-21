@@ -1,5 +1,17 @@
+# IBM Kitura sample for me
+
+## run
 ```
-swift buiuld
+swift build
 ```
+
+## access
 http://localhost:8090
 
+## template engine
+Mustache
+
+## Environment
+swiftenv 1.0.0
+
+DEVELOPMENT-SNAPSHOT-2016-05-03-a
