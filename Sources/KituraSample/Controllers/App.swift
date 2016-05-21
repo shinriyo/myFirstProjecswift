@@ -50,6 +50,8 @@ func setupRoutes(router: Router) {
     router.get("/") {
         request, response, next in
 
+        response.status(.OK).send("Hello, World!すぎた")
+        next()
         // todos.getAll() {
         //     todos in
         //
