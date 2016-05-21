@@ -50,7 +50,7 @@ func setupRoutes(router: Router) {
     router.get("/") {
         request, response, next in
 
-        response.status(.OK).send("Hello, World!すぎた")
+        response.status(.OK).send("shinriyo, World!")
         next()
         // todos.getAll() {
         //     todos in
@@ -98,7 +98,6 @@ func setupRoutes(router: Router) {
         //     }
         //
         // }
-
     }
 
     /**
@@ -257,7 +256,6 @@ func setupRoutes(router: Router) {
         //     }
         //
         // }
-
     }
 
     /**
@@ -275,8 +273,6 @@ func setupRoutes(router: Router) {
         //         Log.error("Could not produce response")
         //     }
         // }
-
-
     }
 
 } // end of SetupRoutes()

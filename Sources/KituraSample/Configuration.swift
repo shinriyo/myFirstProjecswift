@@ -18,7 +18,6 @@ import Foundation
 import CFEnvironment
 
 public struct Configuration {
-    
     let port: Int?
     let url: String?
     let firstPathSegment = "todos"
