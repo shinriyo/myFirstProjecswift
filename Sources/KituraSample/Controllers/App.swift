@@ -19,7 +19,8 @@ import KituraNet
 
 import LoggerAPI
 import SwiftyJSON
-import Mustache
+// import Mustache
+import KituraMustache
 import Foundation // NSFileManager
 
 /**
@@ -57,7 +58,7 @@ func setupRoutes(router: Router) {
     /**
         Get all the todos
     */
-    // router.setTemplateEngine(StencilTemplateEngine())
+    router.setDefaultTemplateEngine(templateEngine: MustacheTemplateEngine())
     router.get("/") {
         request, response, next in
 
@@ -78,52 +79,14 @@ func setupRoutes(router: Router) {
             let dateFormatter = NSDateFormatter()
             dateFormatter.dateStyle = .mediumStyle
             context["format"] = dateFormatter
-
+            // Views folder "layout.mustache"
             try response.status(.OK).render("layout", context: context).end()
+            // directory
+            // response.status(.OK).send("shinriyo, World!")
         } catch {
             Log.error("Failed to render template \(error)")
         }
-
-        // Staticsディレクトリ内のlayout.mustacheのテンプレートを取得する
-        // let template = try! repository.template(named: "layout")
-        // let data = [
-        //     "title" : "KItura",
-        //     "content": [
-        //         "header": "Web application framework Kitura",
-        //         "text": "Build end-to-end apps using Swift with Kitura",
-        //     ]
-        // ]
-        // let html = try! template.render(Box(data))
-        // response.status(.OK).send(html)
-
-        // response.status(.OK).send("shinriyo, World!")
-        // next()
-        // todos.getAll() {
-        //     todos in
-        //
-        //     let json = JSON(TodoCollectionArray.serialize(items: todos))
-        //     do {
-        //         try response.status(.OK).send(json: json).end()
-        //     } catch {
-        //         Log.error("Todo collection could not be serialized")
-        //     }
-        //
-        // }
-
     }
-
-    // router.get("/:name") { request, response, next in
-    //     let name = request.params["name"]!
-    //     // テンプレート作成
-    //     let template = try! Template(string: "Hello, {{name}}!!")
-    //     let data = ["name" : name]
-    //     // 変数の反映
-    //     let boxedData = try! Box(data)
-    //     // HTMLテキスト作成
-    //     let html = try! template.render(boxedData)
-    //     try! response.status(.OK).send(html).end()
-    //     next()
-    // }
 
     /**
      Get information about a todo item by ID
